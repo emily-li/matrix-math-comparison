@@ -2,6 +2,8 @@ package com.liemily.math.matrix;
 
 import org.ejml.simple.SimpleMatrix;
 
+import java.util.Arrays;
+
 class EJMLMatrixCalculator {
     double[] getNorms(final SimpleMatrix matrix) {
         double[] norms = new double[matrix.numRows()];
@@ -27,5 +29,24 @@ class EJMLMatrixCalculator {
     SimpleMatrix cosineSimilarity(final SimpleMatrix matrix) {
         final SimpleMatrix normed = normalise(matrix);
         return normed.mult(normed.transpose());
+    }
+
+    SimpleMatrix cosineDistances(final SimpleMatrix matrix) {
+        SimpleMatrix distances = cosineSimilarity(matrix);
+        final double[][] negMultiplier = new double[matrix.numRows()][matrix.numCols()];
+        for (double[] aNegMultiplier : negMultiplier) {
+            Arrays.fill(aNegMultiplier, -1);
+        }
+        distances = distances.elementDiv(new SimpleMatrix(negMultiplier));
+        distances = distances.plus(1);
+        return correctSelfDistances(distances);
+    }
+
+    SimpleMatrix correctSelfDistances(final SimpleMatrix matrix) {
+        final SimpleMatrix corrected = matrix.copy();
+        for (int i = 0; i < corrected.numRows(); i++) {
+            corrected.set(i, i, 0);
+        }
+        return corrected;
     }
 }

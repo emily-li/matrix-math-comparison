@@ -92,33 +92,24 @@ public class MatrixMathTest {
         assertMatricesEqual(expected, ejml, ojAlgo);
     }
 
+    @Test
+    public void testCosineDistances() {
+        final double[][] expected = plainJavaMatrixCalculator.cosineDistances(matrix);
+        final SimpleMatrix ejml = ejmlMatrixCalculator.cosineDistances(new SimpleMatrix(matrix));
+        final BasicMatrix ojAlgo = ojAlgoMatrixCalculator.cosineDistances(PrimitiveMatrix.FACTORY.rows(matrix));
+        assertMatricesEqual(expected, ejml, ojAlgo);
+    }
+
+    @Test
+    public void testCorrectSelfDistances() {
+        final double[][] expected = plainJavaMatrixCalculator.correctSelfDistances(matrix);
+        final SimpleMatrix ejml = ejmlMatrixCalculator.correctSelfDistances(new SimpleMatrix(matrix));
+        final BasicMatrix ojAlgo = ojAlgoMatrixCalculator.correctSelfDistances(PrimitiveMatrix.FACTORY.rows(matrix));
+        assertMatricesEqual(expected, ejml, ojAlgo);
+    }
+
     private void assertMatricesEqual(final double[][] expected, SimpleMatrix ejmlMatrix, BasicMatrix ojMatrix) {
         assertTrue(new SimpleMatrix(expected).isIdentical(new SimpleMatrix(ejmlMatrix), 0.000000001));
         assertEquals(PrimitiveMatrix.FACTORY.rows(expected), (ojMatrix));
     }
-
-
-    private void assertDoubleMatrixEquals(final double[][] expectedMatrix, final double[][] actualMatrix) {
-        assertEquals(expectedMatrix.length, actualMatrix.length);
-        assertEquals(expectedMatrix[0].length, actualMatrix[0].length);
-        for (int i = 0; i < expectedMatrix.length; i++) {
-            for (int j = 0; j < expectedMatrix[0].length; j++) {
-                assertEquals("Co-ordinates did not match: i=" + i + ", j=" + j, expectedMatrix[i][j], actualMatrix[i][j], 0.001);
-            }
-        }
-    }
-/*
-    public void testCosineSimilarity() {
-        final double[][] expectedMatrix = new double[][]{
-                {1, 0.07168, 0.06349, 0.05976},
-                {0.07168, 1, 0.03297, 0.02943},
-                {0.06349, 0.03297, 1, 0.02181},
-                {0.05976, 0.02943, 0.02181, 1}
-        };
-        final double[][] cosineSimilarity = cosineSimilarity(matrix);
-        assertMatrixEquals(expectedMatrix, cosineSimilarity);
-    }
-
-
-    }*/
 }

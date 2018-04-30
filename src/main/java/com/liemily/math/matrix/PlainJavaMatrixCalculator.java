@@ -46,6 +46,26 @@ class PlainJavaMatrixCalculator {
         return multiply(normedMatrix, transposedMatrix);
     }
 
+    double[][] cosineDistances(final double[][] matrix) {
+        double[][] distances = cosineSimilarity(matrix);
+        for (int i = 0; i < distances.length; i++) {
+            for (int j = 0; j < distances[0].length; j++) {
+                distances[i][j] *= -1;
+                distances[i][j] += 1;
+            }
+        }
+        distances = correctSelfDistances(distances);
+        return distances;
+    }
+
+    double[][] correctSelfDistances(final double[][] distances) {
+        final double[][] correctedDistances = copy(distances);
+        for (int i = 0; i < distances.length; i++) {
+            correctedDistances[i][i] = 0;
+        }
+        return correctedDistances;
+    }
+
     double[][] normalise(final double[][] matrix) {
         double[][] normalised = copy(matrix);
         double[] norms = getNorms(normalised);
