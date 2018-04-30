@@ -16,6 +16,8 @@ import static org.junit.Assert.assertEquals;
  */
 public class MatrixMathTest {
     private static PlainJavaMatrixCalculator plainJavaMatrixCalculator;
+    private static EJMLMatrixCalculator ejmlMatrixCalculator;
+    private static OjAlgoMatrixCalculator ojAlgoMatrixCalculator;
 
     private double[][] matrix;
     private double[][] matrix2;
@@ -23,6 +25,8 @@ public class MatrixMathTest {
     @BeforeClass
     public static void setupBeforeClass() {
         plainJavaMatrixCalculator = new PlainJavaMatrixCalculator();
+        ejmlMatrixCalculator = new EJMLMatrixCalculator();
+        ojAlgoMatrixCalculator = new OjAlgoMatrixCalculator();
     }
 
     @Before
@@ -74,18 +78,10 @@ public class MatrixMathTest {
     }
 
     @Test
-    public void testNorm() {
-        final double[] vector = matrix[0];
-        final double expected = plainJavaMatrixCalculator.getNorm(vector);
-        assertEquals(expected, new SimpleMatrix(new double[][]{vector}).normF(), 0.000000001);
-        assertEquals(expected, PrimitiveMatrix.FACTORY.rows(vector).norm(), 0.000000001);
-    }
-
-    @Test
     public void testNorms() {
-        final double[] expectedNorms = new double[]{111.096, 333.101, 878.39, 5.477};
-        final double[] norms = plainJavaMatrixCalculator.getNorms(matrix);
-        assertArrayEquals(expectedNorms, norms, 0.001);
+        final double[] expected = plainJavaMatrixCalculator.getNorms(matrix);
+        assertArrayEquals(expected, ejmlMatrixCalculator.getNorms(new SimpleMatrix(matrix)), 0.001);
+        assertArrayEquals(expected, ojAlgoMatrixCalculator.getNorms(PrimitiveMatrix.FACTORY.rows(matrix)), 0.001);
     }
 
     private void assertMatricesEqual(final double[][] expected, final double[][] doubleMatrix, SimpleMatrix ejmlMatrix, BasicMatrix ojMatrix) {

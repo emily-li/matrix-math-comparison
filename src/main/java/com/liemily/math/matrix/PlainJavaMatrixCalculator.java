@@ -29,7 +29,7 @@ public class PlainJavaMatrixCalculator {
         return multiplied;
     }
 
-    double getNorm(final double[] vector) {
+    private double getNorm(final double[] vector) {
         return Math.sqrt(DoubleStream.of(vector).map(x -> x * x).sum());
     }
 
