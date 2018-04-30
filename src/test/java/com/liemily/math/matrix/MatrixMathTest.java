@@ -84,6 +84,14 @@ public class MatrixMathTest {
         assertMatricesEqual(expected, ejml, ojAlgo);
     }
 
+    @Test
+    public void testCosineSimilarity() {
+        final double[][] expected = plainJavaMatrixCalculator.cosineSimilarity(matrix);
+        final SimpleMatrix ejml = ejmlMatrixCalculator.cosineSimilarity(new SimpleMatrix(matrix));
+        final BasicMatrix ojAlgo = ojAlgoMatrixCalculator.cosineSimilarity(PrimitiveMatrix.FACTORY.rows(matrix));
+        assertMatricesEqual(expected, ejml, ojAlgo);
+    }
+
     private void assertMatricesEqual(final double[][] expected, SimpleMatrix ejmlMatrix, BasicMatrix ojMatrix) {
         assertTrue(new SimpleMatrix(expected).isIdentical(new SimpleMatrix(ejmlMatrix), 0.000000001));
         assertEquals(PrimitiveMatrix.FACTORY.rows(expected), (ojMatrix));
@@ -111,42 +119,6 @@ public class MatrixMathTest {
         assertMatrixEquals(expectedMatrix, cosineSimilarity);
     }
 
-    double[][] cosineSimilarity(final double[][] matrix) {
-        double[][] normedMatrix = matrix.clone();
-        normedMatrix = normalise(normedMatrix);
-        double[][] transposedMatrix = transpose(normedMatrix);
-        return plainJavaMatrixCalculator.multiply(normedMatrix, transposedMatrix);
-    }
 
-
-    double[] getNorms(final double[][] matrix) {
-        double[][] squares = elementWiseMultiply(matrix, matrix);
-        return Arrays.stream(squares)
-                .mapToDouble(vector -> DoubleStream.of(vector).sum())
-                .map(Math::sqrt)
-                .toArray();
-    }
-
-    public double[][] elementWiseMultiply(final double[][] matrix1, final double[][] matrix2) {
-        if (matrix1.length != matrix2.length || matrix1[0].length != matrix2[0].length) {
-            throw new RuntimeException("Matrices must match in dimension for element wise multiplication");
-        }
-        double[][] multiplied = new double[matrix1.length][matrix2[0].length];
-        for (int i = 0; i < matrix1.length; i++) {
-            for (int j = 0; j < matrix2.length; j++) {
-                multiplied[i][j] = matrix1[i][j] * matrix2[i][j];
-            }
-        }
-        return multiplied;
-    }
-
-    public double[][] transpose(final double[][] matrix) {
-        double[][] transposed = new double[matrix[0].length][matrix.length];
-        for (int i = 0; i < matrix.length; i++) {
-            for (int j = 0; j < matrix[0].length; j++) {
-                transposed[j][i] = matrix[i][j];
-            }
-        }
-        return transposed;
     }*/
 }

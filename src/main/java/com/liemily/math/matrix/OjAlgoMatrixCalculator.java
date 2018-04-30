@@ -20,4 +20,9 @@ class OjAlgoMatrixCalculator {
         }
         return matrix.divideElements(norms);
     }
+
+    BasicMatrix cosineSimilarity(final BasicMatrix matrix) {
+        final BasicMatrix normed = normalise(matrix);
+        return normed.multiply(normed.transpose());
+    }
 }

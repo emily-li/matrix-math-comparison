@@ -29,7 +29,7 @@ class PlainJavaMatrixCalculator {
         return multiplied;
     }
 
-    public double[][] transpose(final double[][] matrix) {
+    double[][] transpose(final double[][] matrix) {
         double[][] transposed = new double[matrix[0].length][matrix.length];
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[0].length; j++) {
@@ -37,6 +37,13 @@ class PlainJavaMatrixCalculator {
             }
         }
         return transposed;
+    }
+
+    double[][] cosineSimilarity(final double[][] matrix) {
+        double[][] normedMatrix = copy(matrix);
+        normedMatrix = normalise(normedMatrix);
+        double[][] transposedMatrix = transpose(normedMatrix);
+        return multiply(normedMatrix, transposedMatrix);
     }
 
     double[][] normalise(final double[][] matrix) {
@@ -53,9 +60,7 @@ class PlainJavaMatrixCalculator {
     private double[][] copy(final double[][] matrix) {
         double[][] clone = new double[matrix.length][matrix[0].length];
         for (int i = 0; i < matrix.length; i++) {
-            for (int j = 0; j < matrix[0].length; j++) {
-                clone[i][j] = matrix[i][j];
-            }
+            System.arraycopy(matrix[i], 0, clone[i], 0, matrix[0].length);
         }
         return clone;
     }

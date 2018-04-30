@@ -23,4 +23,9 @@ class EJMLMatrixCalculator {
         }
         return matrix.elementDiv(normMatrix);
     }
+
+    SimpleMatrix cosineSimilarity(final SimpleMatrix matrix) {
+        final SimpleMatrix normed = normalise(matrix);
+        return normed.mult(normed.transpose());
+    }
 }
