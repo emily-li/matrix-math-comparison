@@ -76,9 +76,17 @@ public class MatrixMathTest {
         assertMatricesEqual(expected, ejmlMatrixCalculator.normalise(new SimpleMatrix(matrix)), ojAlgoMatrixCalculator.normalise(PrimitiveMatrix.FACTORY.rows(matrix)));
     }
 
+    @Test
+    public void testTranspose() {
+        final double[][] expected = plainJavaMatrixCalculator.transpose(matrix);
+        final SimpleMatrix ejml = new SimpleMatrix(matrix).transpose();
+        final BasicMatrix ojAlgo = PrimitiveMatrix.FACTORY.rows(matrix).transpose();
+        assertMatricesEqual(expected, ejml, ojAlgo);
+    }
+
     private void assertMatricesEqual(final double[][] expected, SimpleMatrix ejmlMatrix, BasicMatrix ojMatrix) {
         assertTrue(new SimpleMatrix(expected).isIdentical(new SimpleMatrix(ejmlMatrix), 0.000000001));
-        assertTrue(PrimitiveMatrix.FACTORY.rows(expected).equals(ojMatrix));
+        assertEquals(PrimitiveMatrix.FACTORY.rows(expected), (ojMatrix));
     }
 
 
