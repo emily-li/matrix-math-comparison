@@ -47,34 +47,20 @@ public class MatrixMathTest {
 
     @Test
     public void testMultiply() {
-        final double[][] expected = {
-                {821.4, 944.7, -3025.8, 1261.2},
-                {74122.7, 74461.7, -216840.85, 68248.35},
-                {-194918.165, -195766.287, 572018.738, -181331.064},
-                {-542, -526, 1433, -364}
-        };
-
-        final double[][] multiplied = plainJavaMatrixCalculator.multiply(matrix, matrix2);
+        final double[][] expected = plainJavaMatrixCalculator.multiply(matrix, matrix2);
         final SimpleMatrix ejmlMultiplied = new SimpleMatrix(matrix).mult(new SimpleMatrix(matrix2));
         final BasicMatrix ojMultiplied = PrimitiveMatrix.FACTORY.rows(matrix).multiply(PrimitiveMatrix.FACTORY.rows(matrix2));
 
-        assertMatricesEqual(expected, multiplied, ejmlMultiplied, ojMultiplied);
+        assertMatricesEqual(expected, ejmlMultiplied, ojMultiplied);
     }
 
     @Test
     public void testElemMultiply() {
-        final double[][] expected = new double[][]{
-                {-37.5, -31.2, 130.2, 9213},
-                {-627.75, -8.55, 82251, -109.2},
-                {-715.284, -430.39, 572586.4, -3697.02},
-                {-1.5, -1, 1.5, 6}
-        };
-
-        final double[][] multiplied = plainJavaMatrixCalculator.elemMultiply(matrix, matrix2);
+        final double[][] expected = plainJavaMatrixCalculator.elemMultiply(matrix, matrix2);
         final SimpleMatrix ejmlMultiplied = new SimpleMatrix(matrix).elementMult(new SimpleMatrix(matrix2));
         final BasicMatrix ojMultiplied = PrimitiveMatrix.FACTORY.rows(matrix).multiplyElements(PrimitiveMatrix.FACTORY.rows(matrix2));
 
-        assertMatricesEqual(expected, multiplied, ejmlMultiplied, ojMultiplied);
+        assertMatricesEqual(expected, ejmlMultiplied, ojMultiplied);
     }
 
     @Test
@@ -84,8 +70,13 @@ public class MatrixMathTest {
         assertArrayEquals(expected, ojAlgoMatrixCalculator.getNorms(PrimitiveMatrix.FACTORY.rows(matrix)), 0.001);
     }
 
-    private void assertMatricesEqual(final double[][] expected, final double[][] doubleMatrix, SimpleMatrix ejmlMatrix, BasicMatrix ojMatrix) {
-        assertDoubleMatrixEquals(expected, doubleMatrix);
+    @Test
+    public void testNormalise() {
+        final double[][] expected = plainJavaMatrixCalculator.normalise(matrix);
+        assertMatricesEqual(expected, ejmlMatrixCalculator.normalise(new SimpleMatrix(matrix)), ojAlgoMatrixCalculator.normalise(PrimitiveMatrix.FACTORY.rows(matrix)));
+    }
+
+    private void assertMatricesEqual(final double[][] expected, SimpleMatrix ejmlMatrix, BasicMatrix ojMatrix) {
         assertTrue(new SimpleMatrix(expected).isIdentical(new SimpleMatrix(ejmlMatrix), 0.000000001));
         assertTrue(PrimitiveMatrix.FACTORY.rows(expected).equals(ojMatrix));
     }

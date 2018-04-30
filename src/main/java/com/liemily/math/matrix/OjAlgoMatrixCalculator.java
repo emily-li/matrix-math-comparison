@@ -1,13 +1,23 @@
 package com.liemily.math.matrix;
 
 import org.ojalgo.matrix.BasicMatrix;
+import org.ojalgo.matrix.PrimitiveMatrix;
 
-public class OjAlgoMatrixCalculator {
-    public double[] getNorms(BasicMatrix matrix) {
+class OjAlgoMatrixCalculator {
+    double[] getNorms(final BasicMatrix matrix) {
         double[] norms = new double[(int) matrix.countRows()];
         for (int i = 0; i < norms.length; i++) {
             norms[i] = matrix.selectRows(i).norm();
         }
         return norms;
+    }
+
+    BasicMatrix normalise(final BasicMatrix matrix) {
+        final double[] normArray = getNorms(matrix);
+        BasicMatrix norms = PrimitiveMatrix.FACTORY.columns(normArray);
+        for (int i = 1; i < normArray.length - 1; i++) {
+            norms = norms.mergeRows(norms);
+        }
+        return matrix.divideElements(norms);
     }
 }
