@@ -18,7 +18,6 @@ import java.util.concurrent.Future;
 
 public class PerformanceTester {
     private static ExecutorService executorService;
-    private static int maxParallelRuns;
     private static int totalRuns;
 
     private static EJMLMatrixCalculator ejmlMatrixCalculator;
@@ -38,7 +37,7 @@ public class PerformanceTester {
 
     @BeforeClass
     public static void setupBeforeClass() {
-        maxParallelRuns = 5;
+        final int maxParallelRuns = 5;
         executorService = Executors.newFixedThreadPool(maxParallelRuns);
         totalRuns = 100;
 
@@ -169,7 +168,7 @@ public class PerformanceTester {
             callables.add(() -> time(matrixRunnable));
         }
 
-        long totalTime = 0;
+        double totalTime = 0;
         for (Future<Long> time : executorService.invokeAll(callables)) {
             totalTime += time.get();
         }

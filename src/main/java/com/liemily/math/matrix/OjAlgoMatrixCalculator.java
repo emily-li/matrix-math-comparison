@@ -16,11 +16,11 @@ class OjAlgoMatrixCalculator {
 
     BasicMatrix normalise(final BasicMatrix matrix) {
         final double[] normArray = getNorms(matrix);
-        BasicMatrix norms = PrimitiveMatrix.FACTORY.columns(normArray);
-        for (int i = 1; i < normArray.length - 1; i++) {
-            norms = norms.mergeRows(norms);
+        final double[][] norms = new double[(int) matrix.countRows()][(int) matrix.countColumns()];
+        for (int i = 0; i < normArray.length; i++) {
+            Arrays.fill(norms[i], normArray[i]);
         }
-        return matrix.divideElements(norms);
+        return matrix.divideElements(PrimitiveMatrix.FACTORY.rows(norms));
     }
 
     BasicMatrix cosineSimilarity(final BasicMatrix matrix) {
